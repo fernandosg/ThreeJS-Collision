@@ -1,13 +1,15 @@
 var SCREEN_WIDTH = 650, SCREEN_HEIGHT = 480;
 var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
-var scene=new THREE.Scene();
+var scene=new THREE.Scene(),scene_webcam=new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
-
+var camera_webcam=new THREE.Camera();
+var webcam=new WebcamStream({"WIDTH":SCREEN_WIDTH,"HEIGHT":SCREEN_HEIGHT});
 scene.add(camera);
 camera.lookAt(scene.position);
-
+scene_webcam.add(webcam.getElemento());
 // RENDERER
-var renderer = new THREE.WebGLRenderer( {antialias:true} );
+var renderer = new THREE.WebGLRenderer();
+renderer.autoClear = false;
 renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 container = document.getElementById('canvas');
 container.appendChild( renderer.domElement );
@@ -29,13 +31,19 @@ var collidingTest=[pointer];
 var animate_frame;
 function animate(){
   animate_frame=requestAnimationFrame( animate );
-  elementMoved.geometry.verticesNeedUpdate=true;
-  move();
   render();
+  elementMoved.geometry.verticesNeedUpdate=true;
+
 }
 
 function render(){
+  renderer.clear();
+  renderer.render(scene_webcam,camera_webcam);
+  renderer.clearDepth();
   renderer.render( scene, camera );
+  renderer.clearDepth();
+  webcam.update();
+  move();
 }
 
 function move(){
