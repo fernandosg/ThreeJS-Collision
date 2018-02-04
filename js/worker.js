@@ -4,17 +4,17 @@ self.importScripts('three.min.js');
 var loader = new THREE.ObjectLoader(),ray,array_for_raycaster,element_moved,element_position,colision=false;
 var originPoint,counter_raycaster,vertexIndex;
 onmessage=(evt)=>{
-    var element_moved=loader.parse(evt.data.element);
+    var element_moved=loader.parse(evt.data.element[0]);
     var element_position=new THREE.Vector3();
-    element_position.x=evt.data.element_moved_position.x;
-    element_position.y=evt.data.element_moved_position.y;
-    element_position.z=evt.data.element_moved_position.z;
+    element_position.x=evt.data.element[2].x;
+    element_position.y=evt.data.element[2].y;
+    element_position.z=evt.data.element[2].z;
     var element_matrix=new THREE.Matrix4();
-    element_matrix.elements=evt.data.element_moved_matrix;
+    element_matrix.elements=evt.data.element[1];
     array_for_raycaster=[];
-    for(counter_raycaster=0,element_pivot=null,length=evt.data.colliding_arr.length;counter_raycaster<length;counter_raycaster++){
-      element_pivot=loader.parse(evt.data.colliding_arr[counter_raycaster]);
-      element_pivot.matrixWorld.elements=evt.data.colliding_matrix_array[counter_raycaster];
+    for(counter_raycaster=0,element_pivot=null,length=evt.data.colliding[0].length;counter_raycaster<length;counter_raycaster++){
+      element_pivot=loader.parse(evt.data.colliding[0][counter_raycaster]);
+      element_pivot.matrixWorld.elements=evt.data.colliding[1][counter_raycaster];
       array_for_raycaster.push(element_pivot);
     }
     originPoint=element_position.clone();

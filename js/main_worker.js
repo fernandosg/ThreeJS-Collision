@@ -62,11 +62,9 @@ worker.onmessage=function(e){
 }
 function checkIntersect(){
   collidingTest=[pointer.toJSON()];
-  worker.postMessage({element:elementMoved.toJSON(),
-    element_moved_matrix:elementMoved.matrix.elements,
-    element_moved_position:elementMoved.position,
-    colliding_arr:collidingTest,
-    colliding_matrix_array:[pointer.matrix.elements],
+  worker.postMessage({element:[elementMoved.toJSON(),
+    elementMoved.matrix.elements,elementMoved.position],
+    colliding:[collidingTest,[pointer.matrix.elements]
   });
 }
 animate();
